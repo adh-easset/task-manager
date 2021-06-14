@@ -5,41 +5,19 @@
                 :item="item"
                 class="item"
                 v-on:itemchanged="$emit('reloadlist')"
-                v-on:openModal="addDescription(item)"
             />
         </div>
-    <b-modal id="bv-modal-description" hide-footer>
-        <template #modal-title>
-            Add a task description
-        </template>
-        <div class="">
-
-        </div>
-        <div class="d-block text-center">
-            <input type=text/>
-        </div>
-
-        <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-description')">Close Me</b-button>
-    </b-modal>
-
     </div>
 </template>
 
 <script>
 import listItem from "./listItem";
+import modal from "./modal";
 export default {
     props: ['items'],
     components : {
-        listItem
+        listItem,
     },
-    methods : {
-        addDescription(item) {
-            console.log(`second step: ${JSON.stringify(item.name)}`);
-            this.$bvModal.show('bv-modal-description');
-
-            axios.put
-        }
-    }
 }
 </script>
 

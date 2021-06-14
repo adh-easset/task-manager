@@ -8,24 +8,39 @@
         <span :class="[item.completed ? 'completed' : '','itemText']">
             {{ item.name }}
         </span>
-        <b-button class="Description" @click="descOpen()">
+        <b-button class="Description" @click="openModal ">
             <font-awesome-icon icon="comment-alt" />
         </b-button>
         <button @click="removeItem()" class="trashcan">
             <font-awesome-icon icon="window-close" />
         </button>
+
+        <modal ref="modal">
+            <template v-slot:modal-body>
+                <p> {{ output }} </p>
+            </template>
+        </modal>
     </div>
 </template>
 
 <script>
+import modal from './modal'
+import Vue from 'vue'
 export default {
     props: ['item'],
+    components: { modal },
+    data() {
+        return{
+            output: "This is a description"
+        }
+    },
     methods: {
         updateCheck(){
             axios.put('api/item/' + this.item.id, {
                 item: this.item
             })
             .then(responce =>{
+                // console.log(`step one: ${item}`)
                 if( responce.status == 200){
                     this.$emit('itemchanged');
                 }
@@ -45,10 +60,14 @@ export default {
                 console.log(error)
             })
         },
-        descOpen() {
-            console.log(this.item)
-            this.$emit('openModal')
-        }
+        openModal() {
+            this.$refs.modal.show()
+            this.$nextTick(function () {
+                console.log(`1:  %%%    ${this.item.description}`)
+                this.output = this.item.description
+                console.log(`3:  ***    ${this.output}`)
+            })
+        },
     }
 }
 </script>
