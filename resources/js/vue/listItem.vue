@@ -8,7 +8,7 @@
         <span :class="[item.completed ? 'completed' : '','itemText']">
             {{ item.name }}
         </span>
-        <b-button class="Description" @click="openModal ">
+        <b-button :class="[item.description ? 'Description' : 'empty-description']" @click="openModal ">
             <font-awesome-icon icon="comment-alt" />
         </b-button>
         <button @click="removeItem()" class="trashcan">
@@ -91,6 +91,12 @@ export default {
     border:none;
     color: #ff0000;
     outline: none;
+}
+.empty-description{
+    background: none;
+    outline: none;
+    border: none;
+    color: #999999;
 }
 .Description{
     background: none;

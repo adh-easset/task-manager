@@ -18,6 +18,9 @@ export default {
     components : {
         listItem,
     },
+    mounted() {
+        this.$root.$on("newOutput", ()=>this.$emit('reloadlist'))
+    }
 }
 </script>
 

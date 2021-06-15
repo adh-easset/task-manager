@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 .todoListContainer{
-    width: 350px;
+    max-width: 600px;
     margin: auto;
     margin-top: 5%;
 }

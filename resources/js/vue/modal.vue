@@ -60,9 +60,9 @@
                 }
             }).then(res => {
                 if(res.status == 200){
-                    // this.newDescription = '';
+                    this.newDescription = '';
                     this.showModal = false;
-                    this.$emit('newOutput', newDesc)
+                    this.$root.$emit('newOutput', newDesc)
                 }
             })
             }
@@ -75,13 +75,17 @@
   position:absolute;
   border-radius: 10px;
   right: 35%;
+  left: 35%;
   top: 15%;
+  bottom: 35%;
   padding: 0;
-  margin: 0;
+  margin: auto;
   width: 30%;
+  min-width: 300px;
   height: 50%;
   display: flex;
   align-items: center;
+  justify-content: center;
   background: grey;
   color:white;
   flex-direction: column;
