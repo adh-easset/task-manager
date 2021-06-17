@@ -3,21 +3,38 @@
     <div id="modal">
 
 
-        <slot class="modal-header">
-            <h1>Task description</h1>
-        </slot>
+    <!--Tab start-->
 
-        <div class="modal-body">
-            <slot name="modal-body" v-modal="text"></slot>
-        </div>
+        <b-tabs content-class="mt-0 tabs" fill>
 
-        <div class="input">
-            <textarea id="subject" name="subject" placeholder="Add/Edit Task Description" v-model="newDescription" @change="processChange()"></textarea>
-        </div>
+    <!--Task description tab within modal-->
+            <b-tab title="Task description">
+                <div class="modal-body">
+                    <slot name="modal-body" v-modal="text"></slot>
+                </div>
+                <div class="input">
+                    <textarea id="subject" name="subject" placeholder="Add/Edit Task Description" v-model="newDescription" @change="processChange()"></textarea>
+                </div>
+            </b-tab>
 
+    <!--Comments tab within modal-->
+            <b-tab title="Comments">
+                <div class="addComment">
+                <input type="text" class="inputComment" v-model="comment.content"/>
+                <font-awesome-icon
+                icon="edit"
+                @click="addComment()"
+                />
+                </div>
+            </b-tab>
+        </b-tabs>
+
+    <!--Tab end-->
+
+    <!--save/close buttons within modal-->
         <div class="action-buttons">
-            <b-button variant="light sm"  @click="hide">Close</b-button>
-            <b-button variant="light sm"  @click="postDescription">Save</b-button>
+            <b-button variant="sm" class="m_button" @click="hide">Close</b-button>
+            <b-button variant="sm" class="m_button" @click="postDescription">Save</b-button>
         </div>
 
     </div>
@@ -32,7 +49,11 @@
             return {
                 showModal: false,
                 text: this.$parent.item.description,
-                newDescription: ''
+                item_id: this.$parent.item.id,
+                newDescription: '',
+                comment: {
+                    content: ''
+                }
             }
         },
         methods: {
@@ -41,8 +62,6 @@
             },
             show() {
                 this.showModal = true
-
-
             },
             hide(){
                 this.showModal = false
@@ -53,19 +72,44 @@
                 const newDesc = this.newDescription;
                 const newComplete = this.$parent.item.completed;
 
-            axios.put('api/item/' + this.$parent.item.id, {
-                item: {
-                    "completed": newComplete,
-                    "description": newDesc
+                axios.put('api/item/' + this.$parent.item.id, {
+                    item: {
+                        "completed": newComplete,
+                        "description": newDesc
                 }
-            }).then(res => {
-                if(res.status == 200){
-                    this.newDescription = '';
-                    this.showModal = false;
-                    this.$root.$emit('newOutput', newDesc)
+                }).then(res => {
+                    if(res.status == 200){
+                        this.newDescription = '';
+                        this.showModal = false;
+                        this.$root.$emit('newOutput', newDesc)
+                    }
+                })
+            },
+            addComment(){
+                console.log(this.comment)
+                if(this.comment.name == ''){
+                    return;
                 }
-            })
+
+                const newContent = this.comment.content;
+                const item_id = this.$parent.item.id;
+
+                console.log(`Message content :::::: ${newContent}`)
+                console.log(`Task Id :::::: ${item_id}`)
+
+                axios.post('api/comment/store', {
+                    Comment: {
+                        "content": newContent,
+                        "item_id": item_id
+                    }
+                }).then(res => {
+                    if(res.status == 201){
+                        this.comment.content = "";
+                        this.$root.$emit('reloadList');
+                    }
+                })
             }
+
         }
     }
 </script>
@@ -76,7 +120,6 @@
   border-radius: 10px;
   right: 35%;
   left: 35%;
-  top: 15%;
   bottom: 35%;
   padding: 0;
   margin: auto;
@@ -85,27 +128,32 @@
   height: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
   background: grey;
   color:white;
   flex-direction: column;
     overflow: auto; /* Enable scroll if needed */
-  background-color: #42BE86; /* Fallback color */
-  background-color: rgba(66,190,134,0.9); /* Black w/ opacity */
+  background-color: #40444B;
 }
 .action-buttons{
     margin: 5% 0;
 }
+.m_button{
+    background-color: #0D6EFD !important;
+    color: white !important;
+}
 textarea{
-    margin-top: 0px;
-    margin-bottom: 0px;
-    height: 10rem;
-    width: 15rem;
+    height: 5rem;
+    width: 100%;
     outline: none;
     border: 1px solid #cdcdcd;
     border-color: rgba(0,0,0,.15);
     border-radius: 3px;
-    box-shadow: 0 0 2px 1px #306F52;
+    box-shadow: 0 0 2px 1px #0D6EFD;
+}
+.input{
+    position: absolute;
+    bottom: 20%;
+    width: 80%;
 }
 h1{
     border-bottom: solid 1px #E6E6E6;
@@ -113,7 +161,27 @@ h1{
     padding: 3% 0;
     text-align: center;
 }
+#__BVID__14{
+    height: 100%;
+}
 .modal-body{
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+    color: #e6e6e6
+}
+.tabs{
+    padding: 1rem;
+    min-width: 100%;
+    font-family: 'Roboto', sans-serif;
+    color: #00AFF4;
+    height: 100%;
+}
+.addComment{
+    width: 100%;
+}
+.inputComment{
+    width: 90%;
+}
+input{
+    font-weight: 100;
 }
 </style>

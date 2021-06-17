@@ -1,8 +1,10 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Read
+//---------------------------Task Item routes----------------------------------------
 Route::get('/items', [ItemController::class, 'index']);
 
 Route::prefix('/item')->group( function() {
@@ -27,3 +29,12 @@ Route::prefix('/item')->group( function() {
     Route::delete('/{id}', [ItemController::class, 'destroy']);
     }
 );
+
+//---------------------------Comment routes----------------------------------------
+
+Route::get('comments', 'CommentController@index');
+
+Route::post('comment/store', 'CommentController@store');
+Route::resource('comment', 'CommentController');
+
+
