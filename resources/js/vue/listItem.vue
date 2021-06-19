@@ -31,7 +31,7 @@ export default {
     components: { modal },
     data() {
         return{
-            output: "This is a description"
+            output: "This is a description",
         }
     },
     methods: {
@@ -62,13 +62,16 @@ export default {
         },
         openModal() {
             this.$refs.modal.show()
+            const item_id = this.item.id;
+            console.log(`this items id ::: ${item_id}`)
             this.$nextTick(function () {
                 console.log(`1:  %%%    ${this.item.description}`)
                 this.output = this.item.description
                 console.log(`3:  ***    ${this.output}`)
             })
         },
-    }
+    },
+
 }
 </script>
 

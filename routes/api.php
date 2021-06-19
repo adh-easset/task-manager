@@ -33,7 +33,6 @@ Route::prefix('/item')->group( function() {
 //---------------------------Comment routes----------------------------------------
 
 Route::get('comments', 'CommentController@index');
-
 Route::post('comment/store', 'CommentController@store');
 Route::resource('comment', 'CommentController');
 

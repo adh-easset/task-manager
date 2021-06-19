@@ -19,13 +19,23 @@
 
     <!--Comments tab within modal-->
             <b-tab title="Comments">
+                <!--comment input field-->
                 <div class="addComment">
                 <input type="text" class="inputComment" v-model="comment.content"/>
                 <font-awesome-icon
                 icon="edit"
-                @click="addComment()"
+                @click="addComment(); getComments()"
                 />
                 </div>
+
+                <!--comment display field-->
+
+                <div class="sc">
+                    <listed-comment
+                        :comments="comments"
+                    />
+                </div>
+
             </b-tab>
         </b-tabs>
 
@@ -43,8 +53,12 @@
 </template>
 
 <script>
+    import listedComment from "./listedComment";
+    import Vue from 'vue'
     export default {
-        props: ['item'],
+        components: {
+            listedComment
+        },
         data() {
             return {
                 showModal: false,
@@ -53,7 +67,8 @@
                 newDescription: '',
                 comment: {
                     content: ''
-                }
+                },
+                comments: [],
             }
         },
         methods: {
@@ -108,8 +123,18 @@
                         this.$root.$emit('reloadList');
                     }
                 })
+            },
+            getComments(){
+                axios.get('api/comment/' + this.$parent.item.id)
+                    .then(res => {
+                        this.comments = res.data
+                    }).catch( error => {
+                        console.log(error);
+                    })
             }
-
+        },
+        created(){
+            this.getComments();
         }
     }
 </script>
@@ -132,10 +157,13 @@
   color:white;
   flex-direction: column;
     overflow: auto; /* Enable scroll if needed */
-  background-color: #40444B;
+  background-color: #36393F;
 }
 .action-buttons{
     margin: 5% 0;
+    display: block;
+    position: relative;
+    bottom: 2%;
 }
 .m_button{
     background-color: #0D6EFD !important;
@@ -183,5 +211,11 @@ h1{
 }
 input{
     font-weight: 100;
+}
+.sc{
+    overflow: hidden;
+    overflow-y:scroll;
+    max-height: 18rem;
+    margin-top: 1%;
 }
 </style>

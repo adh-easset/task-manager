@@ -14,6 +14,10 @@ class Comment extends Model
         'item_id'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:m/d/Y'
+    ];
+
     public function item() {
         return $this->belongsTo('App\Item');
     }

@@ -14,7 +14,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return Comment::orderBy('created_at', 'DESC')->get();
+        return Comment::orderBy('item_id', 'DESC')->get();
     }
 
     /**
@@ -49,9 +49,15 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($item_id)
     {
-        //
+        $item_comments = Comment::where('item_id', $item_id)->get();
+        if(!$item_comments){
+            return ['status' => 'error', 'message' => 'There are no results with id '. $item_id];
+        }else{
+            ['status' => 'success', 'data' => $item_id];
+        }
+        return $item_comments;
     }
 
     /**

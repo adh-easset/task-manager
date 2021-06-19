@@ -21,14 +21,14 @@ export default {
     },
     data: function(){
         return {
-            items: []
+            items: [],
         }
     },
     methods: {
         getList () {
             axios.get('api/items')
-            .then(responce => {
-                this.items = responce.data
+            .then(res => {
+                this.items = res.data;
             })
             .catch( error => {
                 console.log(error);
