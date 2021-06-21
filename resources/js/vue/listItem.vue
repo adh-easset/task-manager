@@ -26,6 +26,7 @@
 <script>
 import modal from './modal'
 import Vue from 'vue'
+import { eventBus } from '../app'
 export default {
     props: ['item'],
     components: { modal },
@@ -63,12 +64,13 @@ export default {
         openModal() {
             this.$refs.modal.show()
             const item_id = this.item.id;
-            console.log(`this items id ::: ${item_id}`)
+                // console.log(`this items id ::: ${item_id}`)
             this.$nextTick(function () {
-                console.log(`1:  %%%    ${this.item.description}`)
+                    // console.log(`1:  %%%    ${this.item.description}`)
                 this.output = this.item.description
-                console.log(`3:  ***    ${this.output}`)
+                    // console.log(`3:  ***    ${this.output}`)
             })
+            eventBus.$emit('load_comment')
         },
     },
 

@@ -26,6 +26,7 @@ const app = new Vue({
     components: { App }
 })
 
-const EventBus = new Vue();
+export const eventBus = new Vue();
+
 
 

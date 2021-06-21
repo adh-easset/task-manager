@@ -55,6 +55,7 @@
 <script>
     import listedComment from "./listedComment";
     import Vue from 'vue'
+    import { eventBus } from '../app'
     export default {
         components: {
             listedComment
@@ -109,8 +110,8 @@
                 const newContent = this.comment.content;
                 const item_id = this.$parent.item.id;
 
-                console.log(`Message content :::::: ${newContent}`)
-                console.log(`Task Id :::::: ${item_id}`)
+                // console.log(`Message content :::::: ${newContent}`)
+                // console.log(`Task Id :::::: ${item_id}`)
 
                 axios.post('api/comment/store', {
                     Comment: {
@@ -135,6 +136,7 @@
         },
         created(){
             this.getComments();
+            eventBus.$on('load_comment', () => this.getComments());
         }
     }
 </script>
@@ -148,7 +150,7 @@
   bottom: 35%;
   padding: 0;
   margin: auto;
-  width: 30%;
+  width: 25%;
   min-width: 300px;
   height: 50%;
   display: flex;
@@ -217,5 +219,27 @@ input{
     overflow-y:scroll;
     max-height: 18rem;
     margin-top: 1%;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #2E3338;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>
